@@ -1,4 +1,4 @@
-import {render, screen} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import DashboardHeader, {IDashboardHeaderProps} from "./DashboardHeader";
 
 describe("<LoggerHeader /> Test", (): void => {
@@ -14,9 +14,41 @@ describe("<LoggerHeader /> Test", (): void => {
     },
   };
 
+  it("should have the global-statistics title", (): void => {
+    render(<DashboardHeader {...props} />);
+
+    screen.getByText("Global Statistics:");
+  });
+
+  it("should have the total-confirmed statistic value", (): void => {
+    render(<DashboardHeader {...props} />);
+
+    screen.getByText(`Confirmed: ${props.globalStatistics.totalConfirmed}`);
+  });
+
+  it("should have the total-death statistic value", (): void => {
+    render(<DashboardHeader {...props} />);
+
+    screen.getByText(`Death: ${props.globalStatistics.totalDeaths}`);
+  });
+
+  it("should have the total-recovered statistic value", (): void => {
+    render(<DashboardHeader {...props} />);
+
+    screen.getByText(`Recovered: ${props.globalStatistics.totalRecovered}`);
+  });
+
   it("should have the search input", (): void => {
     render(<DashboardHeader {...props} />);
 
     getSearchInput();
+  });
+
+  it("should raise the search input value to the parent component when a change occur", (): void => {
+    render(<DashboardHeader {...props} />);
+
+    fireEvent.change(getSearchInput(), {target: {value: "jordan"}});
+
+    expect(props.onSearchTermChange).toBeCalledWith("jordan");
   });
 });
