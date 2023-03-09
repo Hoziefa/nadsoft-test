@@ -58,6 +58,7 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (!isSuccess) return;
 
     if (searchTerm) setCountriesStatistics(searchCountries(searchTerm));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
   return (
