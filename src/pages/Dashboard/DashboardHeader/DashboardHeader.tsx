@@ -31,7 +31,7 @@ const DashboardHeader: React.FC<IDashboardHeaderProps> = (props): JSX.Element =>
       </Col>
 
       <Col md={8}>
-        <Input placeholder="Search for country..." value={props.searchTerm} onChange={({target: {value}}) => props.onSearchTermChange(value)} />
+        <Input placeholder="Search for country..." value={props.searchTerm} onChange={({target: {value}}): void => props.onSearchTermChange(value)} />
       </Col>
     </Row>
   );

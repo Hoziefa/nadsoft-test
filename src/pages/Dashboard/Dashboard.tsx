@@ -13,7 +13,7 @@ const PAGE_SIZE = 10;
 const Dashboard: React.FC = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [globalStatistics, setGlobalStatistics] = useState<IGlobalStatistics>({} as IGlobalStatistics);
+  const [globalStatistics, setGlobalStatistics] = useState<IGlobalStatistics>({totalConfirmed: 0, totalDeaths: 0, totalRecovered: 0});
   const [countriesStatistics, setCountriesStatistics] = useState<ICountry[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string | null>(searchParams.get("name"));
