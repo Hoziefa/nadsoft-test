@@ -6,7 +6,7 @@ This project was built with React, Typescript following web standards and best p
 ## Features
 
 * Search is persisted via the Query-Params
-* Components are fully tested
+* Components are fully unit & integration tested
 
 ## Getting Started
 
