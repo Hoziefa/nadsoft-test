@@ -53,7 +53,7 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (isError) message.error((error as Error).message);
   }, [isError, error]);
 
-  // Handle set the query-param when the component mounts, and filter the countries accordingly (to persist user search even after refresh)
+  // Handle set the query-param value to the search-term when the component mounts, and filter the countries accordingly (to persist user search even after refresh)
   useEffect((): void => {
     if (!isSuccess) return;
 
@@ -71,26 +71,44 @@ const Dashboard: React.FC = (): JSX.Element => {
     >
       <Table.Column
         title="Country"
-        sorter={(a: ICountry, b: ICountry) => a.name.localeCompare(b.name)}
-        render={(_, record: ICountry) => <Typography.Text strong>{record.name}</Typography.Text>}
+        sorter={(a: ICountry, b: ICountry): number => a.name.localeCompare(b.name)}
+        render={(_, record: ICountry): JSX.Element => <Typography.Text strong>{record.name}</Typography.Text>}
       />
 
       <Table.Column
         title="Confirmed"
         sorter={(a: ICountry, b: ICountry): number => a.totalConfirmed - b.totalConfirmed}
-        render={(_, record: ICountry) => <Tag color="blue" className="dashboard-table__status-tag">{formatter.format(record.totalConfirmed)}</Tag>}
+        render={(_, record: ICountry): JSX.Element => {
+          return (
+            <Tag color="blue" className="dashboard-table__status-tag">
+              {formatter.format(record.totalConfirmed)}
+            </Tag>
+          );
+        }}
       />
 
       <Table.Column
         title="Death"
-        sorter={(a: ICountry, b: ICountry) => a.totalDeaths - b.totalDeaths}
-        render={(_, record: ICountry) => <Tag color="red" className="dashboard-table__status-tag">{formatter.format(record.totalDeaths)}</Tag>}
+        sorter={(a: ICountry, b: ICountry): number => a.totalDeaths - b.totalDeaths}
+        render={(_, record: ICountry): JSX.Element => {
+          return (
+            <Tag color="red" className="dashboard-table__status-tag">
+              {formatter.format(record.totalDeaths)}
+            </Tag>
+          );
+        }}
       />
 
       <Table.Column
         title="Recovered"
         sorter={(a: ICountry, b: ICountry): number => a.totalRecovered - b.totalRecovered}
-        render={(_, record: ICountry) => <Tag color="green" className="dashboard-table__status-tag">{formatter.format(record.totalRecovered)}</Tag>}
+        render={(_, record: ICountry): JSX.Element => {
+          return (
+            <Tag color="green" className="dashboard-table__status-tag">
+              {formatter.format(record.totalRecovered)}
+            </Tag>
+          );
+        }}
       />
     </Table>
   );
