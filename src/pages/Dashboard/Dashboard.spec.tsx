@@ -1,10 +1,10 @@
-import { render, screen } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { rest } from "msw";
-import { setupServer } from "msw/node";
+import {render, screen} from "@testing-library/react";
+import {QueryClient, QueryClientProvider} from "react-query";
+import {rest} from "msw";
+import {setupServer} from "msw/node";
 
 import Dashboard from "./Dashboard";
-import { IApiForm } from "../../api/countries";
+import {IApiForm} from "../../api/countries";
 
 const logsHandler = rest.get("https://api.covid19api.com/summary", (req, res, ctx) => {
   return res(
@@ -24,7 +24,7 @@ const server = setupServer(logsHandler);
 
 const renderWithQuery = (queryClient: QueryClient) => {
   return render(
-    <QueryClientProvider client={ queryClient }>
+    <QueryClientProvider client={queryClient}>
       <Dashboard />
     </QueryClientProvider>,
   );

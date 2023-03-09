@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import DashboardHeader, { IDashboardHeaderProps } from "./DashboardHeader";
+import {render, screen} from "@testing-library/react";
+import DashboardHeader, {IDashboardHeaderProps} from "./DashboardHeader";
 
 describe("<LoggerHeader /> Test", (): void => {
   const getSearchInput = (): HTMLInputElement => screen.getByPlaceholderText<HTMLInputElement>(/Search for country/);
@@ -15,7 +15,7 @@ describe("<LoggerHeader /> Test", (): void => {
   };
 
   it("should have the search input", (): void => {
-    render(<DashboardHeader { ...props } />);
+    render(<DashboardHeader {...props} />);
 
     getSearchInput();
   });

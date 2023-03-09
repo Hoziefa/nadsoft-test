@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { message, Table, TablePaginationConfig, Typography } from "antd";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {useSearchParams} from "react-router-dom";
+import {useQuery} from "react-query";
+import {message, Table, TablePaginationConfig, Tag, Typography} from "antd";
 
-import DashboardHeader, { IGlobalStatistics } from "./DashboardHeader";
-import { getStatistics, ICountry } from "../../api/countries";
+import DashboardHeader, {IGlobalStatistics} from "./DashboardHeader";
+import {getStatistics, ICountry} from "../../api/countries";
 
 import "./Dashboard.scss";
 
@@ -18,7 +18,9 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string | null>(searchParams.get("name"));
 
-  const { data, isLoading, isSuccess, isError, error } = useQuery("statistics", getStatistics, { staleTime: Infinity });
+  const {data, isLoading, isSuccess, isError, error} = useQuery("statistics", getStatistics, {staleTime: Infinity, cacheTime: 220 * 60 * 1000});
+
+  const formatter = useMemo((): Intl.NumberFormat => Intl.NumberFormat("en", {notation: "standard"}), []);
 
   const paginationConfig = useMemo((): TablePaginationConfig => ({
     pageSize: PAGE_SIZE,
@@ -29,20 +31,20 @@ const Dashboard: React.FC = (): JSX.Element => {
   }), [currentPage]);
 
   const searchCountries = useCallback((searchTerm: string): ICountry[] => {
-    return data!.countries.filter(({ name }): boolean => name.toLowerCase().includes(searchTerm.toLowerCase()));
+    return data!.countries.filter(({name}): boolean => name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [data]);
 
   const onSearchTermChange = useCallback((searchTerm: string): void => {
     setCountriesStatistics(searchCountries(searchTerm));
     setSearchTerm(searchTerm);
-    setSearchParams({ name: searchTerm });
+    setSearchParams({name: searchTerm});
     setCurrentPage(1);
   }, [searchCountries, setSearchParams]);
 
   useEffect((): void => {
     if (!isSuccess) return;
 
-    setGlobalStatistics({ totalConfirmed: data!.totalConfirmed, totalDeaths: data!.totalDeaths, totalRecovered: data!.totalRecovered });
+    setGlobalStatistics({totalConfirmed: data!.totalConfirmed, totalDeaths: data!.totalDeaths, totalRecovered: data!.totalRecovered});
     setCountriesStatistics(data!.countries!);
   }, [data, isSuccess]);
 
@@ -62,33 +64,33 @@ const Dashboard: React.FC = (): JSX.Element => {
     <Table
       rowKey="name"
       className="dashboard-table"
-      dataSource={ countriesStatistics }
-      loading={ isLoading }
-      pagination={ paginationConfig }
-      caption={ <DashboardHeader searchTerm={ searchTerm! } onSearchTermChange={ onSearchTermChange } globalStatistics={ globalStatistics } /> }
+      dataSource={countriesStatistics}
+      loading={isLoading}
+      pagination={paginationConfig}
+      caption={<DashboardHeader searchTerm={searchTerm!} onSearchTermChange={onSearchTermChange} globalStatistics={globalStatistics} />}
     >
       <Table.Column
         title="Country"
-        sorter={ (a: ICountry, b: ICountry) => a.name.localeCompare(b.name) }
-        render={ (_, record: ICountry) => <Typography.Text>{ record.name }</Typography.Text> }
+        sorter={(a: ICountry, b: ICountry) => a.name.localeCompare(b.name)}
+        render={(_, record: ICountry) => <Typography.Text strong>{record.name}</Typography.Text>}
       />
 
       <Table.Column
         title="Confirmed"
-        sorter={ (a: ICountry, b: ICountry): number => a.totalConfirmed - b.totalConfirmed }
-        render={ (_, record: ICountry) => <Typography.Text>{ record.totalConfirmed }</Typography.Text> }
+        sorter={(a: ICountry, b: ICountry): number => a.totalConfirmed - b.totalConfirmed}
+        render={(_, record: ICountry) => <Tag color="blue" className="dashboard-table__status-tag">{formatter.format(record.totalConfirmed)}</Tag>}
       />
 
       <Table.Column
         title="Death"
-        sorter={ (a: ICountry, b: ICountry) => a.totalDeaths - b.totalDeaths }
-        render={ (_, record: ICountry) => <Typography.Text>{ record.totalDeaths }</Typography.Text> }
+        sorter={(a: ICountry, b: ICountry) => a.totalDeaths - b.totalDeaths}
+        render={(_, record: ICountry) => <Tag color="red" className="dashboard-table__status-tag">{formatter.format(record.totalDeaths)}</Tag>}
       />
 
       <Table.Column
         title="Recovered"
-        sorter={ (a: ICountry, b: ICountry): number => a.totalRecovered - b.totalRecovered }
-        render={ (_, record: ICountry) => <Typography.Text>{ record.totalRecovered }</Typography.Text> }
+        sorter={(a: ICountry, b: ICountry): number => a.totalRecovered - b.totalRecovered}
+        render={(_, record: ICountry) => <Tag color="green" className="dashboard-table__status-tag">{formatter.format(record.totalRecovered)}</Tag>}
       />
     </Table>
   );

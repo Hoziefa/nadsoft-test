@@ -1,5 +1,5 @@
-import React from "react";
-import { Col, Input, Row } from "antd";
+import React, {useMemo} from "react";
+import {Col, Input, Row, Tag, Typography} from "antd";
 
 import "./DashboardHeader.scss";
 
@@ -16,10 +16,22 @@ export interface IDashboardHeaderProps {
 }
 
 const DashboardHeader: React.FC<IDashboardHeaderProps> = (props): JSX.Element => {
+  const formatter = useMemo((): Intl.NumberFormat => Intl.NumberFormat("en", {notation: "compact"}), []);
+
   return (
-    <Row className="dashboard-header" data-testid="dashboard-header" gutter={ [24, 12] } align="bottom">
-      <Col md={ 3 }>
-        <Input placeholder="Search for country..." value={ props.searchTerm } onChange={ ({ target: { value } }) => props.onSearchTermChange(value) } />
+    <Row className="dashboard-header" data-testid="dashboard-header" gutter={[24, 12]} align="bottom">
+      <Col md={8}>
+        <Typography.Text strong className="dashboard-header__title">Global Statistics:</Typography.Text>
+
+        <Tag color="blue">Confirmed: {formatter.format(props.globalStatistics.totalConfirmed)}</Tag>
+
+        <Tag color="red">Death: {formatter.format(props.globalStatistics.totalDeaths)}</Tag>
+
+        <Tag color="green">Recovered: {formatter.format(props.globalStatistics.totalRecovered)}</Tag>
+      </Col>
+
+      <Col md={8}>
+        <Input placeholder="Search for country..." value={props.searchTerm} onChange={({target: {value}}) => props.onSearchTermChange(value)} />
       </Col>
     </Row>
   );
