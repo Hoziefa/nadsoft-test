@@ -6,12 +6,15 @@ import {message, Table, TablePaginationConfig, Tag, Typography} from "antd";
 import DashboardHeader, {IGlobalStatistics} from "./DashboardHeader";
 import {getStatistics, ICountry} from "../../api/countries";
 
+import useFormatter from "../../lib/hooks/useFormatter";
+
 import "./Dashboard.scss";
 
 const PAGE_SIZE = 10;
 
 const Dashboard: React.FC = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const {formatter} = useFormatter();
 
   const [globalStatistics, setGlobalStatistics] = useState<IGlobalStatistics>({totalConfirmed: 0, totalDeaths: 0, totalRecovered: 0});
   const [countriesStatistics, setCountriesStatistics] = useState<ICountry[]>([]);
@@ -19,8 +22,6 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string | null>(searchParams.get("name"));
 
   const {data, isLoading, isSuccess, isError, error} = useQuery("statistics", getStatistics, {staleTime: Infinity, cacheTime: 220 * 60 * 1000});
-
-  const formatter = useMemo((): Intl.NumberFormat => Intl.NumberFormat("en", {notation: "standard"}), []);
 
   const paginationConfig = useMemo((): TablePaginationConfig => ({
     pageSize: PAGE_SIZE,

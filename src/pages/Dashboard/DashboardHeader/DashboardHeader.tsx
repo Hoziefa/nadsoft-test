@@ -1,5 +1,7 @@
-import React, {useMemo} from "react";
+import React from "react";
 import {Col, Input, Row, Tag, Typography} from "antd";
+
+import useFormatter from "../../../lib/hooks/useFormatter";
 
 import "./DashboardHeader.scss";
 
@@ -16,7 +18,7 @@ export interface IDashboardHeaderProps {
 }
 
 const DashboardHeader: React.FC<IDashboardHeaderProps> = (props): JSX.Element => {
-  const formatter = useMemo((): Intl.NumberFormat => Intl.NumberFormat("en", {notation: "compact"}), []);
+  const {formatter} = useFormatter("compact");
 
   return (
     <Row className="dashboard-header" data-testid="dashboard-header" gutter={[24, 12]} align="bottom">
