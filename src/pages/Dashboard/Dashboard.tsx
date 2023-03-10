@@ -11,6 +11,7 @@ import useFormatter from "../../lib/hooks/useFormatter";
 import "./Dashboard.scss";
 
 const PAGE_SIZE = 10;
+const THREE_HOURS_CACHE_TIME = 180 * 60 * 1000;
 
 const Dashboard: React.FC = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,7 +22,7 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string | null>(searchParams.get("name"));
 
-  const {data, isLoading, isSuccess, isError, error} = useQuery("statistics", getStatistics, {staleTime: Infinity, cacheTime: 220 * 60 * 1000});
+  const {data, isLoading, isSuccess, isError, error} = useQuery("statistics", getStatistics, {staleTime: Infinity, cacheTime: THREE_HOURS_CACHE_TIME});
 
   const paginationConfig = useMemo((): TablePaginationConfig => ({
     pageSize: PAGE_SIZE,
@@ -46,7 +47,7 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (!isSuccess) return;
 
     setGlobalStatistics({totalConfirmed: data!.totalConfirmed, totalDeaths: data!.totalDeaths, totalRecovered: data!.totalRecovered});
-    setCountriesStatistics(data!.countries!);
+    setCountriesStatistics(data!.countries);
   }, [data, isSuccess]);
 
   // Handle if an error occurs on the API display a friendly message to the user

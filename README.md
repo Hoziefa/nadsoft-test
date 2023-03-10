@@ -10,11 +10,14 @@ This project was built with React, Typescript following web standards and best p
 
 ## Getting Started
 
-#### 1. Install dependencies
+#### 1. Clone the repo
+`git clone https://github.com/Hoziefa/nadsoft-test.git`
+
+#### 2. Install dependencies
 
 `npm install`
 
-#### 2. Run the development server
+#### 3. Run the development server
 
 `npm start`
 

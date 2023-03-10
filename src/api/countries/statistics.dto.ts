@@ -1,7 +1,7 @@
 import { IApiForm, ICountry, IStatistics } from "./statistics.api";
 
 export const statisticsDto = (data: { data: IApiForm }): IStatistics | null => {
-  if (!data) return null;
+  if (!data || !data.data.Countries) return null;
 
   return {
     totalConfirmed: data.data.Global.TotalConfirmed,
